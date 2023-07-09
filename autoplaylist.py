@@ -92,7 +92,10 @@ def description_update():
     playlist_description = str(last_update_time)
     return playlist_description
 
-
+print('Running autoplaylist.py')
 playlist_id = '6bgghJZjZNNNhyIMPy1mD6'
+print('Authenticating Spotify credentials ...') 
 spotifyObject = spotipy.Spotify(auth_manager=authorize())
+print('Updating playlist')
 find_and_add_songs(playlist_id)
+print('Done.')
