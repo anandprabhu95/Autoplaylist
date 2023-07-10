@@ -1,0 +1,7 @@
+Tue 11 Jul 2023 12:00:01 AM CEST
+Running jobs.sh
+Exporting spotify credentials as environment variables
+Running autoplaylist.py
+Authenticating Spotify credentials ...
+Updating playlist
+Done.
