@@ -57,26 +57,27 @@ def song_list(content):
     
 def song_list_new():
     with sync_playwright() as p:
-    browser = p.chromium.launch()
-    page = browser.new_page()
-    page.goto('https://radioparadise.com/music/what-is-playing')
-
-    page.wait_for_load_state("networkidle")
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.goto('https://radioparadise.com/music/what-is-playing')
     
-    list_of_songs = []
-    playtime = 0
-    i = 1
-    while playtime < 65:
-        song = page.locator("div.song-row").nth(i).inner_text()
-        split_data = song.split("\n")
-        title = split_data[2]
-        artist = split_data[3]
-        playtime = playtime + float(split_data[5])
-        list_of_songs.append(artist + " " + title)
-        i = i+1
+        page.wait_for_load_state("networkidle")
         
-    list_of_songs = list(reversed(list_of_songs))        
-    print("Playtime: " + str(playtime) + " minutes")
+        list_of_songs = []
+        playtime = 0
+        i = 1
+        while playtime < 65:
+            song = page.locator("div.song-row").nth(i).inner_text()
+            split_data = song.split("\n")
+            title = split_data[2]
+            artist = split_data[3]
+            playtime = playtime + float(split_data[5])
+            list_of_songs.append(artist + " " + title)
+            i = i+1
+            
+        list_of_songs = list(reversed(list_of_songs))        
+        print("Playtime: " + str(playtime) + " minutes")
+    browser.close()
     return list_of_songs   
     
 
