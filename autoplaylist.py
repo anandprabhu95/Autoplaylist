@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from playwright.sync_api import sync_playwright, expect
 from urllib.request import Request, urlopen
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -53,11 +54,36 @@ def song_list(content):
     list_of_songs = list(reversed(list_of_songs))
     list_of_songs = list_of_songs[4:]
     return list_of_songs
+    
+def song_list_new():
+    with sync_playwright() as p:
+    browser = p.chromium.launch()
+    page = browser.new_page()
+    page.goto('https://radioparadise.com/music/what-is-playing')
 
+    page.wait_for_load_state("networkidle")
+    
+    list_of_songs = []
+    playtime = 0
+    i = 1
+    while playtime < 65:
+        song = page.locator("div.song-row").nth(i).inner_text()
+        split_data = song.split("\n")
+        title = split_data[2]
+        artist = split_data[3]
+        playtime = playtime + float(split_data[5])
+        list_of_songs.append(artist + " " + title)
+        i = i+1
+        
+    list_of_songs = list(reversed(list_of_songs))        
+    print("Playtime: " + str(playtime) + " minutes")
+    return list_of_songs   
+    
 
 def find_and_add_songs(playlistid):
     # List new songs from radio webpage
-    list_of_songs = song_list(setup_data())
+    #list_of_songs = song_list(setup_data()) # Old website
+    list_of_songs = song_list_new() # New website
     #print(list_of_songs)
     
     result_list = []
